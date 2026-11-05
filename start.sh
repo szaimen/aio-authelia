@@ -12,13 +12,21 @@ if ! grep -q " /config " /proc/mounts; then
     exit 1
 fi
 
-for var in NC_DOMAIN NC_BASE_DN JWT_SECRET SESSION_SECRET STORAGE_ENCRYPTION_KEY OIDC_HMAC_SECRET OIDC_CLIENT_SECRET LLDAP_PASSWORD SMTP_PASSWORD; do
-    eval "value=\${$var}"
-    if [ -z "$value" ]; then
-        echo "$var must be set!"
+require_var() {
+    if [ -z "$2" ]; then
+        echo "$1 must be set!"
         exit 1
     fi
-done
+}
+require_var NC_DOMAIN "$NC_DOMAIN"
+require_var NC_BASE_DN "$NC_BASE_DN"
+require_var JWT_SECRET "$JWT_SECRET"
+require_var SESSION_SECRET "$SESSION_SECRET"
+require_var STORAGE_ENCRYPTION_KEY "$STORAGE_ENCRYPTION_KEY"
+require_var OIDC_HMAC_SECRET "$OIDC_HMAC_SECRET"
+require_var OIDC_CLIENT_SECRET "$OIDC_CLIENT_SECRET"
+require_var LLDAP_PASSWORD "$LLDAP_PASSWORD"
+require_var SMTP_PASSWORD "$SMTP_PASSWORD"
 
 AUTHELIA_DOMAIN="auth.$NC_DOMAIN"
 
