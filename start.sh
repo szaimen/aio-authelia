@@ -97,9 +97,10 @@ access_control:
 session:
   secret: '$SESSION_SECRET'
   cookies:
-    - domain: '$NC_DOMAIN'
+    # Only Authelia's own subdomain needs the session cookie since it is only used as OIDC provider.
+    # Using $NC_DOMAIN would send the cookie to all other subdomains (e.g. of other community containers), too.
+    - domain: '$AUTHELIA_DOMAIN'
       authelia_url: 'https://$AUTHELIA_DOMAIN'
-      default_redirection_url: 'https://$NC_DOMAIN'
 
 regulation:
   max_retries: 5
